@@ -1,30 +1,41 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 
 const app = express();
-app.use(bodyParser.json());
+
 const database = {
 	users: [
 		{
-			id: 123,
+			id: '123',
 			name: 'john',
 			email: 'john@gmail.com',
-			password: 'cookies',
 			entries: 0,
 			joined: new Date()
 		},
 		{
-			id: 124,
+			id: '124',
 			name: 'sara',
 			email: 'sara@email.com',
-			password: 'candies',
 			entries: 0,
 			joined: new Date()
 		}
+	],
+	login:[
+		{
+			id: '987',
+			hash: '',
+			email: 'john@gmail.com'
+		}
 	]
 }
+
+app.use(bodyParser.json());
+app.use(cors());
+
 app.get('/',(req,res) => {
-	res.send('This is working..')
+	res.send(database.users)
 })
 
 app.post('/signin', (req,res) => {
@@ -48,6 +59,38 @@ app.post('/register', (req,res) => {
 	})
 	res.json(database.users[database.users.length -1])
 })
+
+app.get('/profile/:id', (req,res) => {
+	const { id } = req.params;
+	let found = false;
+	database.users.forEach(user => {
+		if(user.id === id){
+			console.log('I am working');
+			found = true;
+			return res.json(user);
+		}
+	})
+	if(!found){
+		console.log('I am working');
+		res.status(404).json('no such user');
+	}
+})
+
+app.post('/image', (req,res) => {
+	const { id } = req.body;
+	let found = false;
+	database.users.forEach(user => {
+		if(user.id === id){
+			found = true;
+			user.entries++
+			return res.json(user.entries);
+		}
+	})
+	if(!found){
+		res.status(404).json('no such user');
+	}
+})
+
 
 app.listen(3000, () => {
 	console.log('App is running on port 3000');
