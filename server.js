@@ -11,13 +11,15 @@ const database = {
 			id: '123',
 			name: 'john',
 			email: 'john@gmail.com',
-			entries: 0,
+			entries: 2,
+			password : 'cookies',
 			joined: new Date()
 		},
 		{
 			id: '124',
 			name: 'sara',
-			email: 'sara@email.com',
+			email: 'sara@gmail.com',
+			password : 'candies',
 			entries: 0,
 			joined: new Date()
 		}
@@ -41,7 +43,7 @@ app.get('/',(req,res) => {
 app.post('/signin', (req,res) => {
 	if(req.body.email === database.users[0].email && 
 	   req.body.password === database.users[0].password){
-		res.json('success');
+		res.json(database.users[0]);
 	}else{
 		res.json('Error logging in..')
 	}
@@ -50,10 +52,9 @@ app.post('/signin', (req,res) => {
 app.post('/register', (req,res) => {
 	const { email, name, password} = req.body;
 	database.users.push({
-		id: 124,
+		id: '125',
 		name: name,
 		email: email,
-		password: password,
 		entries: 0,
 		joined: new Date()
 	})
