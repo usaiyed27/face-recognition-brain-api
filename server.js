@@ -29,11 +29,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/',(req,res) => {
-	//res.send(database.users)
-	db.select('name','email').from('users')
-	.then(user =>{
-		res.json(user);
-	})
+	res.send('it is working!')
 })
 
 app.post('/signin', (req,res) => { signin.handleSignin(req, res, db, bcrypt) })
